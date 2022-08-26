@@ -1,3 +1,3 @@
-# Final year project, Piano playing robot
+# Simple ROS tutorials
 
-Contains current git repository connected to the main catkin workspace
+Contains the initial catkin workspace where tutorials are being done
