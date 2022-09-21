@@ -1,3 +1,3 @@
-# Simple ROS tutorials
+# Workspace for Piano robot
 
-Contains the initial catkin workspace where tutorials are being done
+The catkin workspace for all developed packages for robot
