@@ -18,6 +18,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/odroid/catkin_ws/src/CMakeLists.txt"
   "/home/odroid/catkin_ws/src/beginner_tutorials/CMakeLists.txt"
   "/home/odroid/catkin_ws/src/beginner_tutorials/package.xml"
+  "/home/odroid/catkin_ws/src/beginner_tutorials/scripts/add_two_ints_client.py"
+  "/home/odroid/catkin_ws/src/beginner_tutorials/scripts/add_two_ints_server.py"
   "/home/odroid/catkin_ws/src/beginner_tutorials/scripts/listener.py"
   "/home/odroid/catkin_ws/src/beginner_tutorials/scripts/talker.py"
   "/opt/ros/noetic/share/catkin/cmake/all.cmake"
