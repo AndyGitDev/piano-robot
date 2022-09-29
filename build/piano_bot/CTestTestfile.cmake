@@ -1,9 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home/odroid/catkin_ws/src
-# Build directory: /home/odroid/catkin_ws/build
+# Source directory: /home/odroid/catkin_ws/src/piano_bot
+# Build directory: /home/odroid/catkin_ws/build/piano_bot
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
-subdirs("gtest")
-subdirs("beginner_tutorials")
-subdirs("piano_bot")

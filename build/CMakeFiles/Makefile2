@@ -55,12 +55,14 @@ CMAKE_BINARY_DIR = /home/odroid/catkin_ws/build
 # The main recursive "all" target.
 all: gtest/all
 all: beginner_tutorials/all
+all: piano_bot/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: gtest/preinstall
 preinstall: beginner_tutorials/preinstall
+preinstall: piano_bot/preinstall
 
 .PHONY : preinstall
 
@@ -72,6 +74,7 @@ clean: CMakeFiles/tests.dir/clean
 clean: CMakeFiles/download_extra_data.dir/clean
 clean: gtest/clean
 clean: beginner_tutorials/clean
+clean: piano_bot/clean
 
 .PHONY : clean
 
@@ -176,6 +179,24 @@ gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest_main.dir/clean
 gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest.dir/clean
 
 .PHONY : gtest/googletest/clean
+
+#=============================================================================
+# Directory level rules for directory piano_bot
+
+# Recursive "all" directory target.
+piano_bot/all:
+
+.PHONY : piano_bot/all
+
+# Recursive "preinstall" directory target.
+piano_bot/preinstall:
+
+.PHONY : piano_bot/preinstall
+
+# Recursive "clean" directory target.
+piano_bot/clean:
+
+.PHONY : piano_bot/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/doxygen.dir
@@ -316,8 +337,8 @@ CMakeFiles/download_extra_data.dir/clean:
 # Target rules for target gtest/googlemock/CMakeFiles/gmock_main.dir
 
 # All Build rule for target.
-gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googlemock/CMakeFiles/gmock.dir/all
 gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
+gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googlemock/CMakeFiles/gmock.dir/all
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/odroid/catkin_ws/build/CMakeFiles --progress-num=16,17 "Built target gmock_main"
@@ -479,9 +500,9 @@ beginner_tutorials/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/clean:
 # Target rules for target beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir
 
 # All Build rule for target.
-beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/all: beginner_tutorials/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/all: beginner_tutorials/CMakeFiles/_beginner_tutorials_generate_messages_check_deps_Num.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/all: beginner_tutorials/CMakeFiles/_beginner_tutorials_generate_messages_check_deps_AddTwoInts.dir/all
+beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/all: beginner_tutorials/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/depend
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/odroid/catkin_ws/build/CMakeFiles --progress-num=1,2 "Built target beginner_tutorials_generate_messages_cpp"
@@ -643,11 +664,11 @@ beginner_tutorials/CMakeFiles/roscpp_generate_messages_py.dir/clean:
 # Target rules for target beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir
 
 # All Build rule for target.
-beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/all: beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/all: beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/all: beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_nodejs.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/all: beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/all: beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_py.dir/all
+beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/all: beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_cpp.dir/all
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/depend
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/odroid/catkin_ws/build/CMakeFiles --progress-num= "Built target beginner_tutorials_generate_messages"
@@ -890,9 +911,9 @@ beginner_tutorials/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean:
 # Target rules for target beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir
 
 # All Build rule for target.
-beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/all: beginner_tutorials/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/all: beginner_tutorials/CMakeFiles/_beginner_tutorials_generate_messages_check_deps_Num.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/all: beginner_tutorials/CMakeFiles/_beginner_tutorials_generate_messages_check_deps_AddTwoInts.dir/all
+beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/all: beginner_tutorials/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/depend
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_lisp.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/odroid/catkin_ws/build/CMakeFiles --progress-num=6,7 "Built target beginner_tutorials_generate_messages_lisp"
@@ -1056,9 +1077,9 @@ beginner_tutorials/CMakeFiles/roscpp_generate_messages_lisp.dir/clean:
 # Target rules for target beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir
 
 # All Build rule for target.
-beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/all: beginner_tutorials/CMakeFiles/std_msgs_generate_messages_eus.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/all: beginner_tutorials/CMakeFiles/_beginner_tutorials_generate_messages_check_deps_Num.dir/all
 beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/all: beginner_tutorials/CMakeFiles/_beginner_tutorials_generate_messages_check_deps_AddTwoInts.dir/all
+beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/all: beginner_tutorials/CMakeFiles/std_msgs_generate_messages_eus.dir/all
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/depend
 	$(MAKE) -f beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/build.make beginner_tutorials/CMakeFiles/beginner_tutorials_generate_messages_eus.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/odroid/catkin_ws/build/CMakeFiles --progress-num=3,4,5 "Built target beginner_tutorials_generate_messages_eus"
