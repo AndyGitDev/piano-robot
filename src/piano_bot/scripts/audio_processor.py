@@ -168,18 +168,5 @@ def listener():
 
 	rospy.spin()
 
-def test():
-	global _FREQ
-	_FREQ = np.load("/home/odroid/catkin_ws/src/static/pianoKeyFrequencies.npy")
-
-	timeSteps = np.linspace(0, 4096*(1/_SAMPLING_FREQUENCY), 4096)
-	signal = np.sin((3947.8708 * 2*np.pi)*timeSteps)
-
-	freqBin = runGoertzel(signal, _SAMPLING_FREQUENCY, 4096)
-	detectedNote, possibleNotes = detectNotes(freqBin)
-
-	print(f"Detected: {detectedNote} Possible notes: {possibleNotes}")
-
 if __name__ == '__main__':
 	listener()
-	# test()
