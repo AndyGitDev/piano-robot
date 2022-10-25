@@ -6,7 +6,7 @@ from rospy.numpy_msg import numpy_msg
 from rospy_tutorials.msg import Floats
 
 def radFreq(freq):
-	return freq * (np.pi/180)
+	return freq * 2*np.pi
 
 def generateSignal(testFrequency, samplingFrequency, numTerms):
     """
@@ -53,14 +53,20 @@ def generateTestSignal(freq, samplingFreq, numTerms):
     signal, timeSteps = generateSignal(freq, samplingFreq, numTerms)
     noisySignal, noiseFrequencies = generateNoise(signal, timeSteps)
 
-    return noisySignal
+    return np.array(noisySignal, dtype=np.float32)
 
 def talker():
+    _FREQ = np.load("/home/odroid/catkin_ws/src/static/pianoKeyFrequencies.npy")
+
     publisher = rospy.Publisher('audio_signal', numpy_msg(Floats), queue_size=10)
     rospy.init_node("test_node")
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(0.1)
     while not rospy.is_shutdown():
-        testArray = np.random.rand(5)
+        randomFrequency = np.random.choice(_FREQ)
+        testArray = generateTestSignal(randomFrequency, 44100, 4096)
+
+        rospy.loginfo(f"Generated signal with frequency of {randomFrequency} Hz")
+
         publisher.publish(testArray)
 
         rate.sleep()
