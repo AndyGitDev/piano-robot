@@ -219,13 +219,11 @@ def padImage(grayImg, padValue = 1):
 
     return paddedImg
 
-
 def removePadding(paddedImg):
     baseImg = np.delete(paddedImg, [0, -1], axis=1)
     baseImg = np.delete(baseImg, [0, -1], axis=0)
 
     return baseImg
-
 
 def connectedComponents(srcImg, connectivity=4):
     paddedImg = padImage(srcImg)
@@ -313,10 +311,11 @@ def cropImage(grayImage, colourImage):
     threshHold = round(0.6 * np.max(grayImage))
 
     top = np.where(grayImage[:, 2] > threshHold)[0][0]
-    left = np.where(grayImage[top, :] > threshHold)[0][0]
+    left = 0
 
-    right = np.max(np.where(grayImage[top] > threshHold)[0])
-    bottom = np.max(np.where(grayImage[:, left] > threshHold)[0])
+    right = len(grayImage[0])
+    # bottom = np.max(np.where(grayImage[:, left] > threshHold)[0])
+    bottom = top + 80
 
     if top > 5:
         top += 5
@@ -345,6 +344,13 @@ def openImage(image, morphLevel = 3):
     openImage = imageMorphology(eroded, morphLevel, 9)
     
     return openImage
+
+def determineKeyDistances(xWhiteKeys, xBlackKeys):
+    distPerPix = 1.059375
+    whiteKeyDistances = np.array((640 - np.array(xWhiteKeys))*distPerPix, dtype=np.float32)
+    blackKeyDistances = np.array((640 - np.array(xBlackKeys))*distPerPix, dtype=np.float32)
+
+    return whiteKeyDistances, blackKeyDistances
 
 if __name__ == "__main__":
 	pass

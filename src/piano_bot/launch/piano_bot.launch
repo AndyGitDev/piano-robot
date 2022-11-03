@@ -1,0 +1,15 @@
+<launch>
+
+    <node pkg="rosserial_python" type="serial_node.py" name="serial_node" >
+        <param name="port" value="/dev/ttyUSB0" />
+        <param name="baud" value="115200" />
+    </node>
+
+    <node pkg="piano_bot" type="audio_processor.py" name="audio_processor" />
+
+    <node pkg="piano_bot" type="mic_node.py" name="mic_node" />
+
+    <node pkg="piano_bot" type="image_processor.py" name="im_proc_node" />
+
+    <node pkg="piano_bot" type="controller.py" name="controller_node" />
+</launch>

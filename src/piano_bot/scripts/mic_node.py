@@ -1,39 +1,53 @@
 #!/usr/bin/env python3
 import rospy
-import pyaudio
-import struct
 import numpy as np
+
+import sounddevice as sd
+sd.default.samplerate = 44100
+sd.default.channels = 1
+sd.default.dtype = np.float32
 
 from rospy.numpy_msg import numpy_msg
 from rospy_tutorials.msg import Floats
+from std_msgs.msg import Empty
 
-def initAudioStream(samplingRate = 44100, chunkSize = 4096, devIndex = 0):
-	dataFormat = pyaudio.paInt16
+publisher = rospy.Publisher('audio_signal', numpy_msg(Floats), queue_size=10)
+rospy.init_node("mic_node")
 
-	audio = pyaudio.PyAudio()
-	audioStream = audio.open(format = dataFormat, rate=samplingRate, channels=1, input_device_index = devIndex, input=True, frames_per_buffer=chunkSize)
-
-	return audioStream
-
-def talker():
-	chunkSize = 4096
+def recordSignal(empty):
+	chunkSize = 8192
 	samplingRate = 44100
 
-	audioStream = initAudioStream(samplingRate=samplingRate, chunkSize=chunkSize, devIndex=0)
+	rospy.sleep(0.5)
+	recording = sd.rec(frames=chunkSize, samplerate=samplingRate, channels=1)
+	sd.wait()
+	amplitude = np.max(recording)
+	rospy.loginfo(f"Recorded amplitude: {amplitude}")
 
-	publisher = rospy.Publisher('audio_signal', numpy_msg(Floats), queue_size=10)
-	rospy.init_node("mic_node")
-	rate = rospy.Rate(0.1)
+	publisher.publish(recording)
+
+rospy.Subscriber("record_signal", Empty, recordSignal)
+
+def talker():
+	rospy.loginfo("Initialising node")
+
+	chunkSize = 8192
+	samplingRate = 44100
+
+	rate = rospy.Rate(1)
 
 	while not rospy.is_shutdown():
-		data = audioStream.read(chunkSize)
-		decoded = struct.unpack(str(chunkSize) + 'h', data)
-		amplitude = np.max(decoded)
-
-		if amplitude > 3500:
-			publisher.publish(decoded)
+		# rospy.sleep(0.5)
+		recording = sd.rec(frames=chunkSize, samplerate=samplingRate, channels=1)
+		sd.wait()
+		amplitude = np.max(recording)
+		rospy.loginfo(f"Recorded amplitude: {amplitude}")
+		if amplitude > 0.45:
+			publisher.publish(recording)
 
 		rate.sleep()
+
+	rospy.spin()
 
 if __name__ == "__main__":
 	talker()

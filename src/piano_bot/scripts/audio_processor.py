@@ -5,6 +5,7 @@ import numpy as np
 from math import ceil, floor
 from rospy_tutorials.msg import Floats
 from rospy.numpy_msg import numpy_msg
+from std_msgs.msg import String
 
 _FREQ = []
 _SAMPLING_FREQUENCY = 44100
@@ -96,6 +97,9 @@ _NOTE_FREQ = {
 	4182.5722 : "C8",
 }
 
+note = ""
+notes = []
+
 def goertzel(inputSignal, samplingFreq, numTerms, freqIndex):
 	# Goertzel constants
 	K = (_FREQ[freqIndex]*numTerms)/samplingFreq
@@ -151,22 +155,28 @@ def detectNotes(freqBin):
 	return detectedNote, possibleNotes
 
 def callback(data):
+	global detectedNotes
+	
 	rospy.loginfo(f"{rospy.get_name()} received signal")
 	freqBin = runGoertzel(inputSignal=np.array(data.data), samplingFreq=_SAMPLING_FREQUENCY, numTerms=len(data.data))
 	detectedNote, possibleNotes = detectNotes(freqBin)
 	rospy.loginfo(f"Detected: {detectedNote} Possible notes: {possibleNotes}")
+	note = detectedNote
 
-def listener():
-	global _FREQ
+	notePublisher.publish(note)
+
+rospy.Subscriber("audio_signal", numpy_msg(Floats), callback)
+notePublisher = rospy.Publisher('detected_note', String, queue_size=10)
+
+def audioProcessor():
+	global _FREQ, detectedNotes
 	_FREQ = np.load("/home/odroid/catkin_ws/src/static/pianoKeyFrequencies.npy")
 
 	rospy.loginfo("Initialised audio processing node.")
 
 	rospy.init_node('audio_processor_node')
 
-	rospy.Subscriber("audio_signal", numpy_msg(Floats), callback)
-
 	rospy.spin()
 
 if __name__ == '__main__':
-	listener()
+	audioProcessor()

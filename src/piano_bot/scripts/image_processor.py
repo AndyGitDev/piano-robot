@@ -6,6 +6,9 @@ import numpy as np
 import os
 
 from util.utils import *
+from rospy.numpy_msg import numpy_msg
+from rospy_tutorials.msg import Floats
+from std_msgs.msg import UInt16
 
 def getEdges(grayImage):
     edges = cannyEdgeDetector(grayImage)
@@ -116,28 +119,63 @@ def classifyWhiteKeys(whiteComponents, yCenMass, xCenMass, compMatrix, grayImage
     return whiteComponents, yCenMass, xCenMass, notes, blackComponents, yCenBlack, xCenBlack, blackNotes
 
 
-def captureImage(camPort = 0, fileName = "_test.jpg"):
+def captureImage(camPort = 0, fileName = "keyboard.jpeg"):
     cam = cv.VideoCapture(camPort)
 
-    while True:
-        ret, frame = cam.read()
-        cv.imshow('WebCam', frame[0:240, :, :])
-        
-        # wait for the key and come out of the loop
-        if cv.waitKey(1) == ord('q'):
-            break
-
-    initFrames = 15
+    initFrames = 60
     for _ in range(initFrames):
         cam.read()
 
     result, image = cam.read()
 
-    if result:
-        showImage(image[0:240, :, :])
-        saveImage(image[0:240, :, :], fileName)
+    # im = np.around(255.0 * (np.array(image[0:240, :, :])[:, :, ::-1]/ 255.0)**(2.2))
+    # showImage(im.astype(np.uint16))
+
+    return image[0:240, :, :]
+
+def annotateKeyboard():
+
+    im = captureImage()
+
+    grayIm = grayScaleImage(im)
+
+    croppedGray, croppedColour = cropImage(grayIm, im)
+
+    whiteComponents, yCenMass, xCenMass, compMatrix = getWhiteComponents(croppedGray)
+
+    whiteComponents, yCenMass, xCenMass, notes, blackComponents, yCenBlack, xCenBlack, blackNotes = classifyWhiteKeys(whiteComponents, yCenMass, xCenMass, compMatrix, croppedGray)
+
+    notedImage = fullAnnotation(croppedColour.copy(), yCenMass, xCenMass, notes, whiteComponents)
+    notedImage = fullAnnotation(notedImage.copy(), yCenBlack, xCenBlack, blackNotes, blackComponents)
+    
+    whiteKeyDistances, blackKeyDistances = determineKeyDistances(xCenMass, xCenBlack)
+
+    saveImage(notedImage.astype(np.uint16), "annotated.bmp")
+
+    return np.array(notedImage, dtype=np.float32), np.array(whiteKeyDistances, dtype=np.float32), np.array(blackKeyDistances, dtype=np.float32)
 
 
+def processImage(data):
+    rospy.loginfo("Processing image")
+
+    wDistPublisher = rospy.Publisher('white_key_distances', numpy_msg(Floats), queue_size=10)
+    bDistPublisher = rospy.Publisher('black_key_distances', numpy_msg(Floats), queue_size=10)
+
+    annotatedImage, whiteKeyDistances, blackKeyDistances = annotateKeyboard()
+
+    wDistPublisher.publish(np.array(whiteKeyDistances, dtype=np.float32))
+    bDistPublisher.publish(np.array(blackKeyDistances, dtype=np.float32))
+
+    # print(annotatedImage)
+    # showImage(annotatedImage.astype(np.uint16))
+    rospy.loginfo("Generated annotated image")
+
+def main():
+    rospy.init_node("im_proc_node")
+    rospy.loginfo("Initialise image processing node")
+    rospy.Subscriber('process_image', UInt16, processImage)
+
+    rospy.spin()
 
 if __name__ == "__main__":
-	pass
+    main()
